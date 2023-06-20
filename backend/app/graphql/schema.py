@@ -1,5 +1,5 @@
 import graphene
-from .user import UserQuery
+from .user import UserQuery, UserMutation
 from .ciudad import CiudadQuery, CiudadMutation
 from .categoria import CategoriaQuery
 from .producto import ProductoQuery
@@ -27,6 +27,7 @@ class Query(
 
 class Mutation(
     CiudadMutation,
+    UserMutation,
     graphene.ObjectType,
 ):
     pass
