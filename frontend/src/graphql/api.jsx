@@ -10,7 +10,7 @@ export const getAllUsers = async () => {
   `;
 
   try {
-    const response = await axios.post('http://127.0.0.1:8000/graphql/', {
+    const response = await axios.post('http://localhost:8000/graphql/', {
       query,
     });
     return response.data.data.users;

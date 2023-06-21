@@ -1,11 +1,11 @@
 import graphene
 from .user import UserQuery, UserMutation
 from .ciudad import CiudadQuery, CiudadMutation
-from .categoria import CategoriaQuery
-from .producto import ProductoQuery
+from .categoria import CategoriaQuery, CategoriaMutation
+from .producto import ProductoQuery, ProductoMutation
 from .carrito import CarritoQuery
 from .item_carrito import ItemCarritoQuery
-from .metodo_pago import MetodoPagoQuery
+from .metodo_pago import MetodoPagoQuery, MetodoPagoMutation
 from .resena import ResenaQuery
 from .venta import VentaQuery
 from .factura import FacturaQuery
@@ -28,6 +28,9 @@ class Query(
 class Mutation(
     CiudadMutation,
     UserMutation,
+    CategoriaMutation,
+    MetodoPagoMutation,
+    ProductoMutation,
     graphene.ObjectType,
 ):
     pass

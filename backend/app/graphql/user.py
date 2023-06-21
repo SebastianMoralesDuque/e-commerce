@@ -12,20 +12,20 @@ class CreateUserMutation(graphene.Mutation):
     class Arguments:
         password = graphene.String(required=True)
         email = graphene.String(required=True)
+        is_admin = graphene.Boolean(required=True)
         direccion = graphene.String(required=True)
         ciudad_id = graphene.Int(required=True)
-        is_admin = graphene.Boolean(required=True)
 
-    def mutate(self, info, password, email, direccion, ciudad_id, is_admin):
+    def mutate(self, info, password, email, is_admin, direccion, ciudad_id):
         ciudad = Ciudad.objects.get(id=ciudad_id)
 
         user = User(
+            password=password,
             email=email,
+            is_admin=is_admin,
             direccion=direccion,
-            ciudad=ciudad,
-            is_admin=is_admin
+            ciudad=ciudad
         )
-        user.set_password(password)
         user.save()
 
         return CreateUserMutation(user=user)
@@ -35,25 +35,18 @@ class UpdateUserMutation(graphene.Mutation):
 
     class Arguments:
         id = graphene.ID(required=True)
-        username = graphene.String()
         password = graphene.String()
         email = graphene.String()
+        is_admin = graphene.Boolean()
         direccion = graphene.String()
         ciudad_id = graphene.Int()
-        is_admin = graphene.Boolean()
 
     def mutate(self, info, id, **kwargs):
         user = User.objects.get(id=id)
 
         for key, value in kwargs.items():
             if value is not None:
-                if key == 'password':
-                    user.set_password(value)
-                elif key == 'ciudad_id':
-                    ciudad = Ciudad.objects.get(id=value)
-                    setattr(user, 'ciudad', ciudad)
-                else:
-                    setattr(user, key, value)
+                setattr(user, key, value)
         
         user.save()
 
@@ -85,5 +78,3 @@ class UserQuery(graphene.ObjectType):
 
     def resolve_user_by_id(self, info, id):
         return User.objects.get(id=id)
-
-schema = graphene.Schema(query=UserQuery, mutation=UserMutation)

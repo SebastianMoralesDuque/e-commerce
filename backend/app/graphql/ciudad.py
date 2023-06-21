@@ -65,4 +65,3 @@ class CiudadQuery(graphene.ObjectType):
     def resolve_ciudades(self, info):
         return Ciudad.objects.all()
 
-schema = graphene.Schema(query=CiudadQuery, mutation=CiudadMutation)
