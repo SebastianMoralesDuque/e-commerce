@@ -9,15 +9,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG') == 'True'
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-SECRET_KEY = SECRET_KEY
-
-DEBUG = True
-
 ALLOWED_HOSTS = []
 
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:5173', 
+    'http://localhost:5173',
 ]
 
 REST_FRAMEWORK = {
@@ -28,7 +23,6 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ],
 }
-
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -41,6 +35,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'app',
     'graphene_django',
+    'django_nose',
 ]
 
 MIDDLEWARE = [
@@ -85,7 +80,6 @@ DATABASES = {
     }
 }
 
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -105,7 +99,6 @@ GRAPHENE = {
     'SCHEMA': 'app.graphql.schema.schema',
 }
 
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -114,6 +107,19 @@ USE_I18N = True
 
 USE_TZ = True
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Configuración para pytest-django
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+
+# Configuración de la base de datos de prueba
+DATABASES['test'] = {
+    'ENGINE': 'django.db.backends.postgresql',
+    'NAME': 'tienda_test',
+    'USER': 'postgres',
+    'PASSWORD': 'root',
+    'HOST': 'localhost',
+    'PORT': '5432',
+}

@@ -1,6 +1,5 @@
 import graphene
 from graphene_django import DjangoObjectType
-from graphql import GraphQLError
 from ..models import Producto, Categoria
 
 class CategoriaType(DjangoObjectType):
@@ -17,7 +16,7 @@ class CreateProductoMutation(graphene.Mutation):
     class Arguments:
         nombre = graphene.String(required=True)
         categoria_id = graphene.Int(required=True)
-        imagen = graphene.Upload(required=True)  # Actualizado a Upload
+        imagen = graphene.String(required=True)
         stock = graphene.Int(required=True)
 
     def mutate(self, info, nombre, categoria_id, imagen, stock):
@@ -26,9 +25,10 @@ class CreateProductoMutation(graphene.Mutation):
         producto = Producto(
             nombre=nombre,
             categoria=categoria,
+            imagen=imagen,
             stock=stock
         )
-        producto.imagen.save(imagen.name, imagen, save=True) 
+        producto.save()
 
         return CreateProductoMutation(producto=producto)
 
@@ -54,7 +54,7 @@ class UpdateProductoMutation(graphene.Mutation):
         for key, value in kwargs.items():
             if value is not None:
                 setattr(producto, key, value)
-        
+
         producto.save()
 
         return UpdateProductoMutation(producto=producto)
@@ -82,6 +82,6 @@ class ProductoQuery(graphene.ObjectType):
 
     def resolve_productos(self, info):
         return Producto.objects.all()
-    
+
     def resolve_producto_by_id(self, info, id):
         return Producto.objects.get(id=id)
