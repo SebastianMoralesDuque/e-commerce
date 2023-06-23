@@ -144,9 +144,6 @@ class UserMutationTest(TestCase):
         data = result['data']
         self.assertIn('deleteUser', data)
         delete_user_result = data['deleteUser']
-        self.assertIsNotNone(delete_user_result)  # Verificar si delete_user_result no es None
-        if delete_user_result:
-            self.assertTrue(delete_user_result['success'])
-
-            # Verificar que el usuario se haya eliminado de la base de datos
-            self.assertFalse(User.objects.filter(id=user.id).exists())
+        self.assertIsNotNone(delete_user_result)
+        self.assertTrue(delete_user_result['success'])
+        self.assertFalse(User.objects.filter(id=user.id).exists())

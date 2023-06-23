@@ -60,7 +60,7 @@ class Producto(models.Model):
         return self.nombre
 
 class Carrito(models.Model):
-    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    usuario = models.OneToOneField(User, on_delete=models.CASCADE)
     productos = models.ManyToManyField(Producto, through='ItemCarrito')
 
 class ItemCarrito(models.Model):

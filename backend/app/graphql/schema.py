@@ -3,7 +3,7 @@ from .user import UserQuery, UserMutation
 from .ciudad import CiudadQuery, CiudadMutation
 from .categoria import CategoriaQuery, CategoriaMutation
 from .producto import ProductoQuery, ProductoMutation
-from .carrito import CarritoQuery
+from .carrito import CarritoQuery, CarritoMutation
 from .item_carrito import ItemCarritoQuery
 from .metodo_pago import MetodoPagoQuery, MetodoPagoMutation
 from .resena import ResenaQuery
@@ -31,6 +31,7 @@ class Mutation(
     CategoriaMutation,
     MetodoPagoMutation,
     ProductoMutation,
+    CarritoMutation,
     graphene.ObjectType,
 ):
     pass
