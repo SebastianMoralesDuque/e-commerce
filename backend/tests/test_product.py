@@ -1,9 +1,8 @@
 from django.test import TestCase
 from graphene.test import Client
 from app.graphql.schema import schema
-from app.models import Categoria
-from app.models import Producto
-
+from app.models import Categoria, Producto
+from decimal import Decimal
 
 class ProductoMutationTest(TestCase):
     def setUp(self):
@@ -17,14 +16,16 @@ class ProductoMutationTest(TestCase):
         # Definir la consulta de mutación
         mutation = '''
             mutation {
-                createProducto(nombre: "Producto de prueba", categoriaId: %d, imagen: "productos/prueba.png", stock: 1) {
+                createProducto(nombre: "Producto de prueba", categoriaId: %d, imagen: "productos/prueba.png", stock: 1, precio: "10.99") {
                     producto {
                         id
                         nombre
+                        precio
                     }
                 }
             }
         ''' % categoria.id
+
 
         # Ejecutar la mutación utilizando el cliente de pruebas de GraphQL
         executed = self.client.execute(mutation)
@@ -35,6 +36,7 @@ class ProductoMutationTest(TestCase):
         self.assertIn('producto', executed['data']['createProducto'])
         producto = executed['data']['createProducto']['producto']
         self.assertEqual(producto['nombre'], 'Producto de prueba')
+        self.assertEqual(producto['precio'], '10.99')
 
         # Verificar que se haya creado el producto en la base de datos
         self.assertTrue(Producto.objects.filter(nombre='Producto de prueba').exists())
@@ -64,20 +66,22 @@ class ProductoMutationTest(TestCase):
         categoria = Categoria.objects.create(nombre='Categoría de prueba')
 
         # Crear un producto de prueba en la base de datos
-        producto = Producto.objects.create(nombre='Producto inicial', categoria=categoria, imagen='productos/inicial.png', stock=1)
+        producto = Producto.objects.create(nombre='Producto inicial', categoria=categoria, imagen='productos/inicial.png', stock=1, precio=19.99)
 
         # Definir la consulta de mutación para actualizar el producto
         mutation = '''
             mutation {
-                updateProducto(id: %d, nombre: "Producto actualizado", imagen: "productos/actualizado.png") {
+                updateProducto(id: %d, nombre: "Producto actualizado", imagen: "productos/actualizado.png", precio: "15.99") {
                     producto {
                         id
                         nombre
                         imagen
+                        precio
                     }
                 }
             }
         ''' % producto.id
+
 
         # Ejecutar la mutación utilizando el cliente de pruebas de GraphQL
         executed = self.client.execute(mutation)
@@ -89,6 +93,7 @@ class ProductoMutationTest(TestCase):
         producto = executed['data']['updateProducto']['producto']
         self.assertEqual(producto['nombre'], 'Producto actualizado')
         self.assertEqual(producto['imagen'], 'productos/actualizado.png')
+        self.assertEqual(producto['precio'], '15.99')
 
         # Obtener el producto actualizado de la base de datos
         producto_db = Producto.objects.get(id=producto['id'])
@@ -96,7 +101,7 @@ class ProductoMutationTest(TestCase):
         # Verificar que los campos se hayan actualizado correctamente en la base de datos
         self.assertEqual(producto_db.nombre, 'Producto actualizado')
         self.assertEqual(producto_db.imagen, 'productos/actualizado.png')
-
+        self.assertEqual(producto_db.precio, Decimal('15.99'))
         # Realizar una prueba de eliminación de producto
         mutation = '''
             mutation {
@@ -114,13 +119,12 @@ class ProductoMutationTest(TestCase):
         self.assertIn('deleteProducto', executed['data'])
         self.assertTrue(executed['data']['deleteProducto']['success'])
 
-
     def test_delete_producto_mutation(self):
         # Crear una categoría de prueba en la base de datos
         categoria = Categoria.objects.create(nombre='Categoría de prueba')
 
         # Crear un producto de prueba en la base de datos
-        producto = Producto.objects.create(nombre='Producto de prueba', categoria=categoria, imagen='productos/prueba.png', stock=1)
+        producto = Producto.objects.create(nombre='Producto de prueba', categoria=categoria, imagen='productos/prueba.png', stock=1, precio=9.99)
 
         # Definir la consulta de mutación para eliminar el producto
         mutation = '''

@@ -18,15 +18,17 @@ class CreateProductoMutation(graphene.Mutation):
         categoria_id = graphene.Int(required=True)
         imagen = graphene.String(required=True)
         stock = graphene.Int(required=True)
+        precio = graphene.Decimal(required=True)
 
-    def mutate(self, info, nombre, categoria_id, imagen, stock):
+    def mutate(self, info, nombre, categoria_id, imagen, stock, precio):
         categoria = Categoria.objects.get(id=categoria_id)
 
         producto = Producto(
             nombre=nombre,
             categoria=categoria,
             imagen=imagen,
-            stock=stock
+            stock=stock,
+            precio=precio
         )
         producto.save()
 
@@ -41,6 +43,7 @@ class UpdateProductoMutation(graphene.Mutation):
         categoria_id = graphene.Int()
         imagen = graphene.String()
         stock = graphene.Int()
+        precio = graphene.Decimal()
 
     def mutate(self, info, id, **kwargs):
         producto = Producto.objects.get(id=id)

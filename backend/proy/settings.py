@@ -33,9 +33,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
-    'app',
     'graphene_django',
     'django_nose',
+    'app',
 ]
 
 MIDDLEWARE = [
