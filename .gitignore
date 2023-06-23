@@ -1,8 +1,6 @@
 # Django backend
 /backend/venv/
 /backend/.env
-/backend/app/__pycache__/
-/backend/proy/__pycache__/
 
 
 # React frontend with Vite
