@@ -6,7 +6,7 @@ from .producto import ProductoQuery, ProductoMutation
 from .carrito import CarritoQuery, CarritoMutation
 from .item_carrito import ItemCarritoQuery, ItemCarritoMutation
 from .metodo_pago import MetodoPagoQuery, MetodoPagoMutation
-from .resena import ResenaQuery
+from .resena import ResenaQuery,ResenaMutation
 from .venta import VentaQuery
 from .factura import FacturaQuery
 
@@ -33,6 +33,7 @@ class Mutation(
     ProductoMutation,
     CarritoMutation,
     ItemCarritoMutation,
+    ResenaMutation,
     graphene.ObjectType,
 ):
     pass
