@@ -110,6 +110,13 @@ class CarritoMutation(graphene.ObjectType):
 
 class CarritoQuery(graphene.ObjectType):
     carritos = graphene.List(CarritoType)
+    carrito_by_id = graphene.Field(CarritoType, id=graphene.ID(required=True))
 
     def resolve_carritos(self, info):
         return Carrito.objects.all()
+
+    def resolve_carrito_by_id(self, info, id):
+        try:
+            return Carrito.objects.get(id=id)
+        except Carrito.DoesNotExist:
+            return None

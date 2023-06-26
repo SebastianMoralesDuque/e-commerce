@@ -6,11 +6,6 @@ class ResenaType(DjangoObjectType):
     class Meta:
         model = Resena
 
-class ResenaQuery(graphene.ObjectType):
-    resenas = graphene.List(ResenaType)
-
-    def resolve_resenas(self, info):
-        return Resena.objects.all()
 
 class ResenaInput(graphene.InputObjectType):
     usuario_id = graphene.ID(required=True)
@@ -92,3 +87,15 @@ class ResenaMutation(graphene.ObjectType):
     delete_resena = DeleteResenaMutation.Field()
     update_resena = UpdateResenaMutation.Field()
 
+class ResenaQuery(graphene.ObjectType):
+    resenas = graphene.List(ResenaType)
+    resena_by_id = graphene.Field(ResenaType, id=graphene.ID(required=True))
+
+    def resolve_resenas(self, info):
+        return Resena.objects.all()
+
+    def resolve_resena_by_id(self, info, id):
+        try:
+            return Resena.objects.get(id=id)
+        except Resena.DoesNotExist:
+            return None

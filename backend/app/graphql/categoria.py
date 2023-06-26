@@ -54,7 +54,13 @@ class CategoriaMutation(graphene.ObjectType):
 
 class CategoriaQuery(graphene.ObjectType):
     categorias = graphene.List(CategoriaType)
+    categoria_by_id = graphene.Field(CategoriaType, id=graphene.ID(required=True))
 
     def resolve_categorias(self, info):
         return Categoria.objects.all()
 
+    def resolve_categoria_by_id(self, info, id):
+        try:
+            return Categoria.objects.get(id=id)
+        except Categoria.DoesNotExist:
+            return None

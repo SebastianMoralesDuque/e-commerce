@@ -6,12 +6,6 @@ class VentaType(DjangoObjectType):
     class Meta:
         model = Venta
 
-class VentaQuery(graphene.ObjectType):
-    ventas = graphene.List(VentaType)
-
-    def resolve_ventas(self, info):
-        return Venta.objects.all()
-
 class CrearVentaMutation(graphene.Mutation):
     class Arguments:
         usuario_id = graphene.ID(required=True)
@@ -77,3 +71,15 @@ class VentaMutation(graphene.ObjectType):
     editar_venta = EditarVentaMutation.Field()
     eliminar_venta = EliminarVentaMutation.Field()
 
+class VentaQuery(graphene.ObjectType):
+    ventas = graphene.List(VentaType)
+    venta_by_id = graphene.Field(VentaType, id=graphene.ID(required=True))
+
+    def resolve_ventas(self, info):
+        return Venta.objects.all()
+
+    def resolve_venta_by_id(self, info, id):
+        try:
+            return Venta.objects.get(id=id)
+        except Venta.DoesNotExist:
+            return None

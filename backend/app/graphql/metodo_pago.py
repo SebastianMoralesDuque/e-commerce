@@ -55,6 +55,14 @@ class MetodoPagoMutation(graphene.ObjectType):
 
 class MetodoPagoQuery(graphene.ObjectType):
     metodos_pago = graphene.List(MetodoPagoType)
+    metodo_pago_by_id = graphene.Field(MetodoPagoType, id=graphene.ID(required=True))
 
     def resolve_metodos_pago(self, info):
         return MetodoPago.objects.all()
+
+    def resolve_metodo_pago_by_id(self, info, id):
+        try:
+            return MetodoPago.objects.get(id=id)
+        except MetodoPago.DoesNotExist:
+            return None
+

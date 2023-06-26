@@ -6,12 +6,6 @@ class FacturaType(DjangoObjectType):
     class Meta:
         model = Factura
 
-class FacturaQuery(graphene.ObjectType):
-    facturas = graphene.List(FacturaType)
-
-    def resolve_facturas(self, info):
-        return Factura.objects.all()
-
 class CrearFacturaMutation(graphene.Mutation):
     class Arguments:
         venta_id = graphene.ID(required=True)
@@ -76,3 +70,15 @@ class FacturaMutation(graphene.ObjectType):
     editar_factura = EditarFacturaMutation.Field()
     eliminar_factura = EliminarFacturaMutation.Field()
 
+class FacturaQuery(graphene.ObjectType):
+    facturas = graphene.List(FacturaType)
+    factura_by_id = graphene.Field(FacturaType, id=graphene.ID(required=True))
+
+    def resolve_facturas(self, info):
+        return Factura.objects.all()
+
+    def resolve_factura_by_id(self, info, id):
+        try:
+            return Factura.objects.get(id=id)
+        except Factura.DoesNotExist:
+            return None

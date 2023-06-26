@@ -61,7 +61,14 @@ class CiudadMutation(graphene.ObjectType):
 
 class CiudadQuery(graphene.ObjectType):
     ciudades = graphene.List(CiudadType)
+    ciudad_by_id = graphene.Field(CiudadType, id=graphene.ID(required=True))
 
     def resolve_ciudades(self, info):
         return Ciudad.objects.all()
+
+    def resolve_ciudad_by_id(self, info, id):
+        try:
+            return Ciudad.objects.get(id=id)
+        except Ciudad.DoesNotExist:
+            return None
 

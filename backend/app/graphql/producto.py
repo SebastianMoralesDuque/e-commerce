@@ -87,4 +87,7 @@ class ProductoQuery(graphene.ObjectType):
         return Producto.objects.all()
 
     def resolve_producto_by_id(self, info, id):
-        return Producto.objects.get(id=id)
+        try:
+            return Producto.objects.get(id=id)
+        except Producto.DoesNotExist:
+            return None

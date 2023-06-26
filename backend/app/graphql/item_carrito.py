@@ -6,12 +6,6 @@ class ItemCarritoType(DjangoObjectType):
     class Meta:
         model = ItemCarrito
 
-class ItemCarritoQuery(graphene.ObjectType):
-    item_carritos = graphene.List(ItemCarritoType)
-
-    def resolve_item_carritos(self, info):
-        return ItemCarrito.objects.all()
-
 import graphene
 from graphene_django import DjangoObjectType
 from ..models import ItemCarrito, Carrito, Producto
@@ -81,3 +75,15 @@ class ItemCarritoMutation(graphene.ObjectType):
     delete_item_carrito = DeleteItemCarrito.Field()
     update_item_carrito = UpdateItemCarrito.Field()
 
+class ItemCarritoQuery(graphene.ObjectType):
+    items_carrito = graphene.List(ItemCarritoType)
+    item_carrito_by_id = graphene.Field(ItemCarritoType, id=graphene.ID(required=True))
+
+    def resolve_items_carrito(self, info):
+        return ItemCarrito.objects.all()
+
+    def resolve_item_carrito_by_id(self, info, id):
+        try:
+            return ItemCarrito.objects.get(id=id)
+        except ItemCarrito.DoesNotExist:
+            return None

@@ -77,4 +77,7 @@ class UserQuery(graphene.ObjectType):
         return User.objects.all()
 
     def resolve_user_by_id(self, info, id):
-        return User.objects.get(id=id)
+        try:
+            return User.objects.get(id=id)
+        except User.DoesNotExist:
+            return None
