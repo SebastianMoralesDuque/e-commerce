@@ -7,8 +7,8 @@ from .carrito import CarritoQuery, CarritoMutation
 from .item_carrito import ItemCarritoQuery, ItemCarritoMutation
 from .metodo_pago import MetodoPagoQuery, MetodoPagoMutation
 from .resena import ResenaQuery,ResenaMutation
-from .venta import VentaQuery
-from .factura import FacturaQuery
+from .venta import VentaQuery,VentaMutation
+from .factura import FacturaQuery,FacturaMutation
 
 class Query(
     UserQuery,
@@ -34,6 +34,8 @@ class Mutation(
     CarritoMutation,
     ItemCarritoMutation,
     ResenaMutation,
+    VentaMutation,
+    FacturaMutation,
     graphene.ObjectType,
 ):
     pass
