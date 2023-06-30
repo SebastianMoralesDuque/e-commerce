@@ -1,13 +1,5 @@
 import graphene
 from graphene_django import DjangoObjectType
-from ..models import ItemCarrito
-
-class ItemCarritoType(DjangoObjectType):
-    class Meta:
-        model = ItemCarrito
-
-import graphene
-from graphene_django import DjangoObjectType
 from ..models import ItemCarrito, Carrito, Producto
 
 class ItemCarritoType(DjangoObjectType):

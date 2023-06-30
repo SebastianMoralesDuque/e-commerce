@@ -6,10 +6,6 @@ class CarritoType(DjangoObjectType):
     class Meta:
         model = Carrito
 
-class ItemCarritoType(DjangoObjectType):
-    class Meta:
-        model = ItemCarrito
-
 class CarritoQuery(graphene.ObjectType):
     carritos = graphene.List(CarritoType)
 
@@ -74,19 +70,6 @@ class AddProductoToCarritoMutation(graphene.Mutation):
 
         return AddProductoToCarritoMutation(carrito=carrito)
 
-class UpdateItemCarritoMutation(graphene.Mutation):
-    item_carrito = graphene.Field(ItemCarritoType)
-
-    class Arguments:
-        item_carrito_id = graphene.ID(required=True)
-        cantidad = graphene.Int(required=True)
-
-    def mutate(self, info, item_carrito_id, cantidad):
-        item_carrito = ItemCarrito.objects.get(id=item_carrito_id)
-        item_carrito.cantidad = cantidad
-        item_carrito.save()
-
-        return UpdateItemCarritoMutation(item_carrito=item_carrito)
 
 class DeleteItemCarritoMutation(graphene.Mutation):
     success = graphene.Boolean()
@@ -105,7 +88,6 @@ class CarritoMutation(graphene.ObjectType):
     update_carrito = UpdateCarritoMutation.Field()
     delete_carrito = DeleteCarritoMutation.Field()
     add_producto_to_carrito = AddProductoToCarritoMutation.Field()
-    update_item_carrito = UpdateItemCarritoMutation.Field()
     delete_item_carrito = DeleteItemCarritoMutation.Field()
 
 class CarritoQuery(graphene.ObjectType):

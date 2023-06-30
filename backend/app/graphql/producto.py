@@ -2,9 +2,6 @@ import graphene
 from graphene_django import DjangoObjectType
 from ..models import Producto, Categoria
 
-class CategoriaType(DjangoObjectType):
-    class Meta:
-        model = Categoria
 
 class ProductoType(DjangoObjectType):
     class Meta:
